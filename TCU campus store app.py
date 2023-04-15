@@ -175,13 +175,58 @@ class MyGUI:
             messagebox.showerror("Error", "Please select at least one item.")
         else:
             messagebox.showinfo("Success", f"Selected items: {', '.join(selected)}")
+            print(selected)
 
         # Get the selected section
         selected_section = self.selected_section.get()
 
+        #Write the logic for the shortest path through TCU campus store
+        distance_dict = {"Cashier": 1, "Starbucks": 2, "Hats": 3, "Men's Clothing": 4, "Women's Clothing": 5, "Fan Gear": 6, "Supplies": 7, "Electronics": 8, "Textbooks": 9, "Books": 10, "Clerk": 11}
+
+        '''The logic for finding the shortest path is as follows: if the selected item list match the item in distance dict, 
+        then the user will just go to the location with the highest number, the second highest, etc. and down to the last definitive location, which is the cashier'''
+
+        #Match number in distance_dict with item in selected list
+        number_list = []
+        for item in selected:
+            number_list.append(distance_dict[item])
+        #Sort the number list from largest to smallest
+        number_list.sort(reverse=True)
+        print(number_list)
+        #Match the number in number list with the items in distance dict
+        sorted_items = []
+        for number in number_list:
+            for item in distance_dict:
+                if number == distance_dict[item]:
+                    sorted_items.append(item)
+        
         # Display the selected section and items
         message = f"You selected {', '.join(selected)}, and you're going from the {selected_section} section. "
-        message += "To find these items, please follow the following instructions: "
+        for i in range(len(number_list)):
+            if i == 0:
+                message += f"\n To find these items, please follow the following instructions: Go to {sorted_items[0]}; "
+            elif i == 1:
+                message += f"then, go to {sorted_items[1]}; "
+            elif i == 2:
+                message += f"then, go to {sorted_items[2]}; "
+            elif i == 3:
+                message += f"then, go to {sorted_items[3]}; "
+            elif i == 4:
+                message += f"then, go to {sorted_items[4]}; "
+            elif i == 5:
+                message += f"then, go to {sorted_items[5]}; "
+            elif i == 6:
+                message += f"then, go to {sorted_items[6]}; "
+            elif i == 7:
+                message += f"then, go to {sorted_items[7]}; "
+            elif i == 8:
+                message += f"then, go to {sorted_items[8]}; "
+            elif i == 9:
+                message += f"then, go to {sorted_items[9]}; "
+            
+        
+        message += "Then, go to the cashier to pay for your items."
+        
         message_label = tk.Label(self.master, text=message)
         message_label.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
 
