@@ -18,7 +18,7 @@ class MyGUI:
 
         # Load the logo image and resize it
         logo_image = Image.open("client_logo.jpg")
-        logo_image = logo_image.resize((50, 50), Image.ANTIALIAS)
+        logo_image = logo_image.resize((80, 80), Image.ANTIALIAS)
 
         # Convert the logo image to a PhotoImage and add it to the logo canvas
         self.logo_image = ImageTk.PhotoImage(logo_image)
@@ -28,7 +28,7 @@ class MyGUI:
 
         # Load the first map image and resize it
         map1_image = Image.open("campus store map.png")
-        map1_image = map1_image.resize((700, 300), Image.ANTIALIAS)
+        map1_image = map1_image.resize((700, 250), Image.ANTIALIAS)
 
         # Convert the first map image to a PhotoImage and add it to the first canvas
         self.map1_image = ImageTk.PhotoImage(map1_image)
@@ -37,7 +37,7 @@ class MyGUI:
         self.map1_canvas.create_image(0, 0, anchor="nw", image=self.map1_image)
 
         # Add other widgets to the GUI
-        self.label = tk.Label(self.master, text="Welcome to TCU's Campus Store!")
+        self.label = tk.Label(self.master, text="Welcome to TCU's Campus Store!", bg = "#fff0f5", font=("Arial", 12, "bold"))
         self.label.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
 
         self.button = tk.Button(self.master, text="Find my way!", bg="#d0f0c0", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=10, height=2, command=self.on_button_click)
@@ -220,29 +220,91 @@ class MyGUI:
 
             # Display the selected section and items
             message = f"You selected {', '.join(selected)}, and you're going from the {selected_section} section. "
-            for i in range(len(number_list)):
+            for i in range(len(number_list)): 
                 if i == 0:
-                    message += f"\n To find these items, please follow the following instructions: First, go to {sorted_items[0]}; "
+                    message += f"\n To find these items, please follow the following instructions:\n"
+                    if sorted_items[0] == selected_section:
+                        message += f"You're already at the {selected_section} section, so go to second step;"
+                    else: 
+                        if sorted_items[0] == "Cashier" or sorted_items[0] == "Starbucks" or sorted_items[0] == "Fan Gear" or sorted_items[0] == "Women's Clothing" or sorted_items[0] == "Men's Clothing" or sorted_items[0] == "Hats":
+                            message += f"First, go to the first floor"
+                        if sorted_items[0] ==  "Supplies" or sorted_items[0] == "Electronics" or sorted_items[0] == "Textbooks" or sorted_items[0] == "Books" or sorted_items[0] == "Clerk":
+                            message += f"First, go to the second floor"
+                        message += f" and go to {sorted_items[0]};"
                 elif i == 1:
-                    message += f"\n Second, go to {sorted_items[1]}; "
+                    message += f"\n Second,"
+                    if "go to the first floor" in message:
+                        if sorted_items[1] ==  "Supplies" or sorted_items[1] == "Electronics" or sorted_items[1] == "Textbooks" or sorted_items[1] == "Books" or sorted_items[1] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[1] == "Cashier" or sorted_items[1] == "Starbucks" or sorted_items[1] == "Fan Gear" or sorted_items[1] == "Women's Clothing" or sorted_items[1] == "Men's Clothing" or sorted_items[1] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[1]};"
                 elif i == 2:
-                    message += f"\n Third, go to {sorted_items[2]}; "
+                    message += f"\n Third,"
+                    if "go to the first floor" in message:
+                        if sorted_items[2] ==  "Supplies" or sorted_items[2] == "Electronics" or sorted_items[2] == "Textbooks" or sorted_items[2] == "Books" or sorted_items[2] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[2] == "Cashier" or sorted_items[2] == "Starbucks" or sorted_items[2] == "Fan Gear" or sorted_items[2] == "Women's Clothing" or sorted_items[2] == "Men's Clothing" or sorted_items[2] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[2]};"
                 elif i == 3:
-                    message += f"\n Fourth, go to {sorted_items[3]}; "
+                    message += f"\n Fourth,"
+                    if "go to the first floor" in message:
+                        if sorted_items[3] ==  "Supplies" or sorted_items[3] == "Electronics" or sorted_items[3] == "Textbooks" or sorted_items[3] == "Books" or sorted_items[3] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[3] == "Cashier" or sorted_items[3] == "Starbucks" or sorted_items[3] == "Fan Gear" or sorted_items[3] == "Women's Clothing" or sorted_items[3] == "Men's Clothing" or sorted_items[3] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[3]};"       
                 elif i == 4:
-                    message += f"\n Fifth, go to {sorted_items[4]}; "
+                    message += f"\n Fifth,"
+                    if "go to the first floor" in message:
+                        if sorted_items[4] ==  "Supplies" or sorted_items[4] == "Electronics" or sorted_items[4] == "Textbooks" or sorted_items[4] == "Books" or sorted_items[4] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[4] == "Cashier" or sorted_items[4] == "Starbucks" or sorted_items[4] == "Fan Gear" or sorted_items[4] == "Women's Clothing" or sorted_items[4] == "Men's Clothing" or sorted_items[4] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[4]};"  
                 elif i == 5:
-                    message += f"\n Sixth, go to {sorted_items[5]}; "
+                    message += f"\n Sixth,"
+                    if "go to the first floor" in message:
+                        if sorted_items[5] ==  "Supplies" or sorted_items[5] == "Electronics" or sorted_items[5] == "Textbooks" or sorted_items[5] == "Books" or sorted_items[5] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[5] == "Cashier" or sorted_items[5] == "Starbucks" or sorted_items[5] == "Fan Gear" or sorted_items[5] == "Women's Clothing" or sorted_items[5] == "Men's Clothing" or sorted_items[5] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[5]};"  
                 elif i == 6:
-                    message += f"\n Seventh, go to {sorted_items[6]}; "
+                    message += f"\n Seventh,"
+                    if "go to the first floor" in message:
+                        if sorted_items[6] ==  "Supplies" or sorted_items[6] == "Electronics" or sorted_items[6] == "Textbooks" or sorted_items[6] == "Books" or sorted_items[6] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[6] == "Cashier" or sorted_items[6] == "Starbucks" or sorted_items[6] == "Fan Gear" or sorted_items[6] == "Women's Clothing" or sorted_items[6] == "Men's Clothing" or sorted_items[6] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[6]};"  
                 elif i == 7:
-                    message += f"\n Eigth, go to {sorted_items[7]}; "
+                    message += f"\n Eighth,"
+                    if "go to the first floor" in message:
+                        if sorted_items[7] ==  "Supplies" or sorted_items[7] == "Electronics" or sorted_items[7] == "Textbooks" or sorted_items[7] == "Books" or sorted_items[7] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[7] == "Cashier" or sorted_items[7] == "Starbucks" or sorted_items[7] == "Fan Gear" or sorted_items[7] == "Women's Clothing" or sorted_items[7] == "Men's Clothing" or sorted_items[7] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[7]};"
                 elif i == 8:
-                    message += f"\n Ninth, go to {sorted_items[8]}; "
-                elif i == 9:
-                    message += f"\n Tenth, go to {sorted_items[9]}; "
-                
-            message += f"\n Finally, go to the cashier to pay for your items."
+                    message += f"\n Ninth,"
+                    if "go to the first floor" in message:
+                        if sorted_items[8] ==  "Supplies" or sorted_items[8] == "Electronics" or sorted_items[8] == "Textbooks" or sorted_items[8] == "Books" or sorted_items[8] == "Clerk":
+                            message += f" go to the second floor and"
+                    elif "go to the second floor" in message:
+                        if sorted_items[8] == "Cashier" or sorted_items[8] == "Starbucks" or sorted_items[8] == "Fan Gear" or sorted_items[8] == "Women's Clothing" or sorted_items[8] == "Men's Clothing" or sorted_items[8] == "Hats":
+                            message += f" go to the first floor and"
+                    message += f" go to {sorted_items[8]};"
+
+            message += f"\n Finally, go to the cashier on the first floor and pay for your items."
             
             message_label = tk.Label(self.master, text=message, bg="#fff0f5")
             message_label.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
