@@ -149,6 +149,7 @@ class MyGUI:
             "Electronics": tk.StringVar(value=""),
             "Supplies": tk.StringVar(value=""),
             "Books": tk.StringVar(value=""),
+            "Clerk": tk.StringVar(value=""),
         }
 
         self.mens_clothing_check = tk.Checkbutton(self.checkbox_frame, text="Men's Clothing", variable=self.item_values["Men's Clothing"],  onvalue="Men's Clothing", offvalue="", bg="#fff0f5")
@@ -182,6 +183,10 @@ class MyGUI:
         self.supplies_check = tk.Checkbutton(self.checkbox_frame, text="Books", variable=self.item_values["Books"], onvalue="Books", offvalue="", bg="#fff0f5")
         self.supplies_check.grid(row=6, column=1, padx=0, pady=0, sticky="w")
         self.selected_items["Books"] = self.item_values["Books"]
+
+        self.supplies_check = tk.Checkbutton(self.checkbox_frame, text="Clerk", variable=self.item_values["Clerk"], onvalue="Clerk", offvalue="", bg="#fff0f5")
+        self.supplies_check.grid(row=7, column=1, padx=0, pady=0, sticky="w")
+        self.selected_items["Clerk"] = self.item_values["Clerk"]
 
         self.item_submit_button = tk.Button(self.master, text="Find your way!", command=self.on_submit, bg = "#d0f0c0", font=("Arial", 10, "bold"))
         self.item_submit_button.grid(row=7, column=0, padx=10, pady=10, columnspan=2)
@@ -224,7 +229,7 @@ class MyGUI:
                 if i == 0:
                     message += f"\n To find these items, please follow the following instructions:\n"
                     if sorted_items[0] == selected_section:
-                        message += f"You're already at the {selected_section} section, so go to second step;"
+                        message += f"You're already at the {selected_section} section, so go to the next step;"
                     else: 
                         if sorted_items[0] == "Cashier" or sorted_items[0] == "Starbucks" or sorted_items[0] == "Fan Gear" or sorted_items[0] == "Women's Clothing" or sorted_items[0] == "Men's Clothing" or sorted_items[0] == "Hats":
                             message += f"First, go to the first floor"
