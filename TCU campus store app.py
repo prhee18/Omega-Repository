@@ -1,8 +1,9 @@
+#Import necessary modules and packages
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 
-
+# Create the main window
 class MyGUI:
 
     def __init__(self, master):
@@ -10,7 +11,6 @@ class MyGUI:
         self.container = tk.Frame(self.master)
         self.master.title("TCU Campus Store App")
         self.master.config(bg= "#B2A4D4")
-        
 
         # Create the header frame and set the background color to TCU's purple
         self.header_frame = tk.Frame(self.master, bg="#4d1979")
@@ -104,7 +104,7 @@ class MyGUI:
         # Add the section selection submit button
         self.section_submit_button = tk.Button(self.master, bg="#d0f0c0", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=5, height=1, text="Next", command=self.on_section_submit, anchor="center")
         self.section_submit_button.grid(row=9, column=0, padx=10, pady=10, columnspan=2)
-
+    #Function to submit the section selection and lead the user to the next page, where they select checkboxes of items they want to purchase
     def on_section_submit(self):
         # Get the selected section
         selected_section = self.selected_section.get()
@@ -135,7 +135,7 @@ class MyGUI:
         self.checkbox_frame = tk.Frame(self.master, bg = "#fff0f5")
         self.checkbox_frame.grid(row=3, column=0, padx=10, pady=10)
 
-        # Add the item selection label and check boxes
+        # Add the item selection label and check boxes. Also, set up the checkboxes to be unchecked and disabled by default so the app recognizes when a checkbox is checked
         self.item_label = tk.Label(self.master, text="Please select what you want to buy. Select at least one.", bg = "#fff0f5", font=("Arial", 12, "bold"))
         self.item_label.grid(row=2, column=0, padx=10, pady=10, columnspan=3)
 
@@ -149,7 +149,7 @@ class MyGUI:
             "Electronics": tk.StringVar(value=""),
             "Supplies": tk.StringVar(value=""),
             "Books": tk.StringVar(value=""),
-            "Clerk": tk.StringVar(value=""),
+            "Starbucks": tk.StringVar(value=""),
         }
 
         self.mens_clothing_check = tk.Checkbutton(self.checkbox_frame, text="Men's Clothing", variable=self.item_values["Men's Clothing"],  onvalue="Men's Clothing", offvalue="", bg="#fff0f5")
@@ -184,14 +184,15 @@ class MyGUI:
         self.supplies_check.grid(row=6, column=1, padx=0, pady=0, sticky="w")
         self.selected_items["Books"] = self.item_values["Books"]
 
-        self.supplies_check = tk.Checkbutton(self.checkbox_frame, text="Clerk", variable=self.item_values["Clerk"], onvalue="Clerk", offvalue="", bg="#fff0f5")
+        self.supplies_check = tk.Checkbutton(self.checkbox_frame, text="Starbucks", variable=self.item_values["Starbucks"], onvalue="Starbucks", offvalue="", bg="#fff0f5")
         self.supplies_check.grid(row=7, column=1, padx=0, pady=0, sticky="w")
-        self.selected_items["Clerk"] = self.item_values["Clerk"]
+        self.selected_items["Starbucks"] = self.item_values["Starbucks"]
 
-        self.item_submit_button = tk.Button(self.master, text="Find your way!", command=self.on_submit, bg = "#d0f0c0", font=("Arial", 10, "bold"))
+        self.item_submit_button = tk.Button(self.master, text="Find your way!", command=self.on_checkbox_submit, bg = "#d0f0c0", font=("Arial", 10, "bold"))
         self.item_submit_button.grid(row=7, column=0, padx=10, pady=10, columnspan=2)
-
-    def on_submit(self):
+    
+    #This is the function that will be called when the user clicks the Find your way! button
+    def on_checkbox_submit(self):
         selected = [item for item in self.selected_items.keys() if self.selected_items[item].get()]
         if len(selected) == 0:
             messagebox.showerror("Error", "Please select at least one item.")
@@ -203,8 +204,9 @@ class MyGUI:
             #Write the logic for the shortest path through TCU campus store
             distance_dict = {"Cashier": 1, "Starbucks": 2, "Hats": 3, "Men's Clothing": 4, "Women's Clothing": 5, "Fan Gear": 6, "Supplies": 7, "Electronics": 8, "Textbooks": 9, "Books": 10, "Clerk": 11}
 
-            '''The logic for finding the shortest path is as follows: if the selected item list match the item in distance dict, 
-            then the user will just go to the location with the highest number, the second highest, etc. and down to the last definitive location, which is the cashier'''
+            '''The logic for finding the shortest path is as follows: if the selected list match the item in distance dict, 
+            then the application will record the numbers of the selected items and sort them highest to lowest. 
+            This means that the user will just go to the location with the highest number, the second highest, etc. and down to the last definitive location, which is the cashier'''
 
             #Match number in distance_dict with item in selected list
             number_list = []
@@ -212,7 +214,7 @@ class MyGUI:
                 number_list.append(distance_dict[item])
             #Sort the number list from largest to smallest
             number_list.sort(reverse=True)
-            print(number_list)
+    
             #Match the number in number list with the items in distance dict
             sorted_items = []
             for number in number_list:
@@ -223,11 +225,11 @@ class MyGUI:
             #Destroy Next button
             self.item_submit_button.destroy()
 
-            # Display the selected section and items
-            message = f"You selected {', '.join(selected)}, and you're going from the {selected_section} section. "
+            # Display the selected section and items and the instructions for the user
+            message = f"You're going from the {selected_section}. "
             for i in range(len(number_list)): 
                 if i == 0:
-                    message += f"\n To find these items, please follow the following instructions:\n"
+                    message += f"To find your item(s), please follow the following instructions:\n"
                     if sorted_items[0] == selected_section:
                         message += f"You're already at the {selected_section} section, so go to the next step;"
                     else: 
@@ -313,10 +315,10 @@ class MyGUI:
             
             message_label = tk.Label(self.master, text=message, bg="#fff0f5")
             message_label.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
-            
+
+# Run the program  
 if __name__ == "__main__":
     root = tk.Tk()
-    
     # Set a fixed size for column 1
     root.columnconfigure(1, minsize=10)
     my_gui = MyGUI(root)
