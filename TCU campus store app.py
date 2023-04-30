@@ -46,7 +46,6 @@ class MyGUI:
 
     def on_button_click(self):  
         
-
         # Show the map in the container frame
         self.map1_canvas = tk.Canvas(self.container, width=500, height=300)
         self.map1_canvas.grid(row=0, column=0, padx=0, pady=0)
@@ -61,7 +60,7 @@ class MyGUI:
 
         # Add the section selection label and radio buttons
 
-        self.section_label = tk.Label(self.master, text="Please select your current section:", bg = "#fff0f5", font=("Arial", 12, "bold"))
+        self.section_label = tk.Label(self.master, text="Please select your current location/section:", bg = "#fff0f5", font=("Arial", 12, "bold"))
         self.section_label.grid(row=2, column=0, padx=5, pady=5, columnspan=1)
         self.section_label.columnconfigure(0, minsize = 0)
 
@@ -104,6 +103,7 @@ class MyGUI:
         # Add the section selection submit button
         self.section_submit_button = tk.Button(self.master, bg="#d0f0c0", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=5, height=1, text="Next", command=self.on_section_submit, anchor="center")
         self.section_submit_button.grid(row=9, column=0, padx=10, pady=10, columnspan=2)
+    
     #Function to submit the section selection and lead the user to the next page, where they select checkboxes of items they want to purchase
     def on_section_submit(self):
         # Get the selected section
@@ -195,9 +195,12 @@ class MyGUI:
     def on_checkbox_submit(self):
         selected = [item for item in self.selected_items.keys() if self.selected_items[item].get()]
         if len(selected) == 0:
-            messagebox.showerror("Error", "Please select at least one item.")
+            error_message = tk.Label(self.master, text="Please select at least 1 item.", fg="red", bg = "#fff0f5", font=("Arial", 12, "bold"))
+            error_message.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
+            error_message.after(1000, error_message.destroy)  # hide the error message after 3 seconds
+            return
         else:
-            messagebox.showinfo("Success", f"Selected items: {', '.join(selected)}")
+            
             # Get the selected section
             selected_section = self.selected_section.get()
 
@@ -212,6 +215,7 @@ class MyGUI:
             number_list = []
             for item in selected:
                 number_list.append(distance_dict[item])
+                
             #Sort the number list from largest to smallest
             number_list.sort(reverse=True)
     
@@ -315,6 +319,8 @@ class MyGUI:
             
             message_label = tk.Label(self.master, text=message, bg="#fff0f5")
             message_label.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
+            disclaimer = tk.Label(self.master, text = "Disclaimer: Instructions might not be correct due to occasional move-around of items", fg ="red", bg="#fff0f5")
+            disclaimer.grid(row=9, column=0, padx=10, pady=10, columnspan=2)
 
 # Run the program  
 if __name__ == "__main__":
