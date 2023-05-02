@@ -1,7 +1,20 @@
+''' TCU Campus App for the final project on Visual Studio Code
+   Programmers: Jessiny Ly & John Horter
+   Date completed: 5/1/2023
+   Program: TCU Campus Store App
+   Description: This program's purpose is to figure out the shortest path though the TCU Campus 
+   Store for the users, depending on what they want to buy and where they are in the campus store. 
+   The program will ask the user to input their current location and their desired items. 
+   After the user input the items, the program will give the user a detailed instruction of the 
+   shortest path through TCU Campus Store for the user.
+   Debugging credit: ChatGPT
+   Method suggestions credit: ChatGPT
+   Repetitive code generation: GitHub Copilot'''
 #Import necessary modules and packages
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import webbrowser
 
 # Create the main window
 class MyGUI:
@@ -18,7 +31,7 @@ class MyGUI:
 
         # Load the logo image and resize it
         logo_image = Image.open("client_logo.jpg")
-        logo_image = logo_image.resize((80, 80), Image.ANTIALIAS)
+        logo_image = logo_image.resize((80, 80), Image.LANCZOS)
 
         # Convert the logo image to a PhotoImage and add it to the logo canvas
         self.logo_image = ImageTk.PhotoImage(logo_image)
@@ -28,7 +41,7 @@ class MyGUI:
 
         # Load the first map image and resize it
         map1_image = Image.open("campus store map.png")
-        map1_image = map1_image.resize((700, 250), Image.ANTIALIAS)
+        map1_image = map1_image.resize((700, 250), Image.LANCZOS)
 
         # Convert the first map image to a PhotoImage and add it to the first canvas
         self.map1_image = ImageTk.PhotoImage(map1_image)
@@ -51,12 +64,21 @@ class MyGUI:
         self.map1_canvas.grid(row=0, column=0, padx=0, pady=0)
 
         # Hide the initial label and button
-        self.label.grid_forget()
-        self.button.grid_forget()
+        self.label.destroy()
+        self.button.destroy()
 
         # Create a new frame for radio buttons
         self.radio_frame = tk.Frame(self.master,bg = "#fff0f5")
-        self.radio_frame.grid(row=3, column=0, padx=10, pady=10)
+        self.radio_frame.grid(row=3, column=0, padx=10, pady=0)
+
+        #Create a new frame for the help and submit buttons
+        self.button_frame = tk.Frame(self.master, bg = "#B2A4D4")
+        self.button_frame.grid(row=4, column=0, padx=10, pady=0)
+
+        #Create a new frame for error message
+        self.error_frame = tk.Frame(self.master, bg = "#B2A4D4")
+        self.error_frame.grid(row=5, column=0, padx=10, pady=0)
+
 
         # Add the section selection label and radio buttons
 
@@ -100,23 +122,41 @@ class MyGUI:
         self.textbooks_radio = tk.Radiobutton(self.radio_frame, text="Textbooks", variable=self.selected_section, value="Textbooks", bg="#fff0f5")
         self.textbooks_radio.grid(row=8, column=1, padx=0, pady=0, sticky="w")
 
+        #Add the help button
+        self.help_button = tk.Button(self.button_frame, bg="#d0f0c0", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=5, height=1, text="Help", command=self.on_help_button_click, anchor="center")
+        self.help_button.grid(row=10, column=1, padx=0, pady=0, columnspan=2, sticky="e")
+
         # Add the section selection submit button
-        self.section_submit_button = tk.Button(self.master, bg="#d0f0c0", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=5, height=1, text="Next", command=self.on_section_submit, anchor="center")
-        self.section_submit_button.grid(row=9, column=0, padx=10, pady=10, columnspan=2)
-    
+        self.section_submit_button = tk.Button(self.button_frame, bg="#d0f0c0", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=5, height=1, text="Next", command=self.on_section_submit, anchor="center")
+        self.section_submit_button.grid(row=10, column=0, padx=20, pady=10, columnspan=1)
+
+        
+
+    #Function to display the help message
+    def on_help_button_click(self):
+        webbrowser.open_new(r"https://www.bkstr.com/tcustore/help-faq")
+
     #Function to submit the section selection and lead the user to the next page, where they select checkboxes of items they want to purchase
     def on_section_submit(self):
         # Get the selected section
         selected_section = self.selected_section.get()
 
+         #Create a new frame for the help and submit buttons
+        self.button_frame = tk.Frame(self.master, bg = "#B2A4D4")
+        self.button_frame.grid(row=4, column=0, padx=10, pady=0)
+        
+         #Create a new frame for error message
+        self.error_frame = tk.Frame(self.master, bg = "#B2A4D4")
+        self.error_frame.grid(row=5, column=0, padx=10, pady=0)
+
         # If no section is selected, show an error message
         if selected_section == "None":
-            error_message = tk.Label(self.master, text="Please select a section.", fg="red", bg = "#fff0f5", font=("Arial", 12, "bold"))
-            error_message.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
-            error_message.after(1000, error_message.destroy)  # hide the error message after 3 seconds
+            error_message = tk.Label(self.error_frame, text="Please select a section.", fg="red", bg = "#fff0f5", font=("Arial", 12, "bold"))
+            error_message.grid(row=8, column=0, padx=10, pady=2, columnspan=1)
+            error_message.after(1000, error_message.destroy)   # hide the error message after 3 seconds. Method suggested by ChatGPT. 
             return
 
-        # Destroy the section selection label and radio buttons
+        # Destroy the section selection label and radio buttons. Repetitive code to destroy radio buttons are generated by GitHub Copilot. 
         self.section_label.destroy()
         self.mens_radio.destroy()
         self.womens_radio.destroy()
@@ -131,7 +171,7 @@ class MyGUI:
         self.clerk_radio.destroy()
         self.section_submit_button.destroy()
 
-        # Create a new frame for radio buttons
+        # Create a new frame for checkbox buttons
         self.checkbox_frame = tk.Frame(self.master, bg = "#fff0f5")
         self.checkbox_frame.grid(row=3, column=0, padx=10, pady=10)
 
@@ -151,6 +191,10 @@ class MyGUI:
             "Books": tk.StringVar(value=""),
             "Starbucks": tk.StringVar(value=""),
         }
+
+        '''Creation of checkboxes for each item section at TCU Campus Store, 
+        where they are unchecked by the default. Checkboxes unchecked by default code is from ChatGPT. 
+        The generation of similar, repetitive code for sections after Men's Clothing is by GitHub Copilot.'''
 
         self.mens_clothing_check = tk.Checkbutton(self.checkbox_frame, text="Men's Clothing", variable=self.item_values["Men's Clothing"],  onvalue="Men's Clothing", offvalue="", bg="#fff0f5")
         self.mens_clothing_check.grid(row=3, column=0, padx=0, pady=5, sticky="w")
@@ -188,19 +232,28 @@ class MyGUI:
         self.supplies_check.grid(row=7, column=1, padx=0, pady=0, sticky="w")
         self.selected_items["Starbucks"] = self.item_values["Starbucks"]
 
-        self.item_submit_button = tk.Button(self.master, text="Find your way!", command=self.on_checkbox_submit, bg = "#d0f0c0", font=("Arial", 10, "bold"))
-        self.item_submit_button.grid(row=7, column=0, padx=10, pady=10, columnspan=2)
+        #Add the help button
+        self.help_button = tk.Button(self.button_frame, bg="#d0f0c0", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=5, height=1, text="Help", command=self.on_help_button_click)
+        self.help_button.grid(row=7, column=1, padx=0, pady=0, columnspan=1, sticky="e")
+
+        #Add the submit button
+        self.item_submit_button = tk.Button(self.button_frame, text="Submit", fg="black", font=("Arial", 10, "bold"), bd=3, relief="raised", width=7, height=1, command=self.on_checkbox_submit, bg = "#d0f0c0")
+        self.item_submit_button.grid(row=7, column=0, padx=20, pady=0, columnspan=1)
+
     
     #This is the function that will be called when the user clicks the Find your way! button
     def on_checkbox_submit(self):
-        selected = [item for item in self.selected_items.keys() if self.selected_items[item].get()]
+         #Create a new frame for error message
+        self.error_frame = tk.Frame(self.master, bg = "#B2A4D4")
+        self.error_frame.grid(row=5, column=0, padx=10, pady=0)
+
+        selected = [item for item in self.selected_items.keys() if self.selected_items[item].get()] #get the selected items. Method suggested by ChatGPT
         if len(selected) == 0:
-            error_message = tk.Label(self.master, text="Please select at least 1 item.", fg="red", bg = "#fff0f5", font=("Arial", 12, "bold"))
-            error_message.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
-            error_message.after(1000, error_message.destroy)  # hide the error message after 3 seconds
+            error_message = tk.Label(self.error_frame, text="Please select at least 1 item.", fg="red", bg = "#fff0f5", font=("Arial", 12, "bold"))
+            error_message.grid(row=1, column=0, padx=10, pady=2, columnspan=2)
+            error_message.after(1000, error_message.destroy)  # hide the error message after 3 seconds. Method suggested by ChatGPT. 
             return
         else:
-            
             # Get the selected section
             selected_section = self.selected_section.get()
 
@@ -232,6 +285,7 @@ class MyGUI:
             # Display the selected section and items and the instructions for the user
             message = f"You're going from the {selected_section}. "
             for i in range(len(number_list)): 
+                #Logic for the instruction of finding the shortest path. Similar, repetitive code after i == 2 is generated by GitHub Copilot
                 if i == 0:
                     message += f"To find your item(s), please follow the following instructions:\n"
                     if sorted_items[0] == selected_section:
@@ -318,9 +372,9 @@ class MyGUI:
             message += f"\n Finally, go to the cashier on the first floor and pay for your items."
             
             message_label = tk.Label(self.master, text=message, bg="#fff0f5")
-            message_label.grid(row=8, column=0, padx=10, pady=10, columnspan=2)
+            message_label.grid(row=6, column=0, padx=10, pady=0, columnspan=2)
             disclaimer = tk.Label(self.master, text = "Disclaimer: Instructions might not be correct due to occasional move-around of items", fg ="red", bg="#fff0f5")
-            disclaimer.grid(row=9, column=0, padx=10, pady=10, columnspan=2)
+            disclaimer.grid(row=7, column=0, padx=10, pady=0, columnspan=2)
 
 # Run the program  
 if __name__ == "__main__":
